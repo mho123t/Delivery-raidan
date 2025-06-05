@@ -4,109 +4,198 @@
   <meta charset="UTF-8">
   <title>نظام إدارة التوصيل</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #1e90ff; 
+      --danger-color: #e74c3c;
+      --success-color: #2ecc71;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f6fa;
       color: #333;
     }
+
+    .container {
+      max-width: 100%;
+      padding: 15px;
+    }
+
     h2 {
       text-align: center;
+      margin-bottom: 20px;
+      background: var(--primary-color);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
     }
+
+    .form-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      flex: 1 1 calc(50% - 10px);
+      box-sizing: border-box;
+    }
+
+    button {
+      background: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0d6efd;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
       background: white;
+      margin-top: 20px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+
     th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 12px;
       text-align: center;
+      border-bottom: 1px solid #ddd;
     }
-    input, select, button {
-      padding: 8px;
-      margin: 5px;
-      width: 100%;
-      box-sizing: border-box;
+
+    td[data-label]::before {
+      content: attr(data-label) ": ";
+      font-weight: bold;
+      color: #555;
     }
-    .form-group {
-      margin-bottom: 15px;
-    }
+
     @media (max-width: 600px) {
-      table, thead, tbody, th, td, tr {
+      thead { display: none; }
+      tr {
         display: block;
-      }
-      th {
-        display: none;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
       }
       td {
-        position: relative;
-        padding-left: 50%;
+        display: block;
         text-align: right;
+        padding: 5px 0;
       }
-      td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        font-weight: bold;
-      }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      background: #eee;
+      color: #555;
+      margin-top: 30px;
+    }
+
+    .lang-switch {
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .lang-switch button {
+      margin-left: 10px;
+      font-size: 14px;
+      padding: 5px 10px;
+    }
+
+    .en {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .btn-danger {
+      background: var(--danger-color);
+    }
+
+    .btn-success {
+      background: var(--success-color);
     }
   </style>
 </head>
 <body>
 
-<h2>نظام إدارة توصيل الطلبات</h2>
+<div class="container">
+  <div class="lang-switch">
+    <button onclick="setLang('ar')">عربي</button>
+    <button onclick="setLang('en')">English</button>
+  </div>
 
-<div style="max-width: 600px; margin: auto;">
+  <h2 class="en">Delivery Management System</h2>
+  <h2 class="ar">نظام إدارة التوصيل</h2>
+
   <div class="form-group">
-    <label>رقم الطلب:</label>
-    <input type="text" id="orderID" placeholder="أدخل رقم الطلب">
-  </div>
-  <div class="form-group">
-    <label>اسم الدلفري:</label>
+    <input type="text" id="orderID" placeholder="رقم الطلب / Order ID">
     <select id="driverName">
-      <option value="شاهد">شاهد</option>
-      <option value="نعيم">نعيم</option>
-      <option value="حامد">حامد</option>
-      <option value="منهاج">منهاج</option>
-      <option value="محمد ارشد">محمد ارشد</option>
-      <option value="قاسم">قاسم</option>
-      <option value="منور علي">منور علي</option>
-      <option value="أديب">أديب</option>
-      <option value="شهرزاد">شهرزاد</option>
+      <option value="شاهد">شاهد - Shawad</option>
+      <option value="نعيم">نعيم - Naeem</option>
+      <option value="حامد">حامد - Hamad</option>
+      <option value="منهاج">منهاج - Munajj</option>
+      <option value="محمد ارشد">محمد ارشد - Mohammed Arshad</option>
+      <option value="قاسم">قاسم - Qasim</option>
+      <option value="منور علي">منور علي - Manwar Ali</option>
+      <option value="أديب">أديب - Adeeb</option>
+      <option value="شهرزاد">شهرزاد - Sherazad</option>
     </select>
+    <input type="text" id="address" placeholder="عنوان التوصيل / Delivery Address">
+    <button onclick="addOrder()">➕ إضافة طلب / Add Order</button>
+    <button onclick="deleteAll()" class="btn-danger">🧹 مسح الكل / Delete All</button>
+    <button onclick="exportTableToExcel()">📤 تنزيل الجدول / Export Table</button>
   </div>
-  <div class="form-group">
-    <label>عنوان التوصيل:</label>
-    <input type="text" id="address" placeholder="أدخل عنوان التوصيل">
+
+  <table id="ordersTable">
+    <thead>
+      <tr>
+        <th>رقم الطلب / Order ID</th>
+        <th>اسم الدلفري / Driver Name</th>
+        <th>عنوان التوصيل / Delivery Address</th>
+        <th>الحالة / Status</th>
+        <th>الإجراءات / Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="footer">
+    &copy; جميع الحقوق محفوظة | Developed by You
   </div>
-  <button onclick="addOrder()">➕ إضافة طلب</button>
-  <button onclick="deleteAll()" style="background:red;color:white;">🧹 مسح الكل</button>
 </div>
 
-<table id="ordersTable">
-  <thead>
-    <tr>
-      <th>رقم الطلب</th>
-      <th>اسم الدلفري</th>
-      <th>عنوان التوصيل</th>
-      <th>الحالة</th>
-      <th>الإجراءات</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
 <script>
+  function setLang(lang) {
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.querySelectorAll(".ar").forEach(el => el.style.display = lang === "ar" ? "" : "none");
+    document.querySelectorAll(".en").forEach(el => el.style.display = lang === "en" ? "" : "none");
+  }
+
   function addOrder() {
     const orderID = document.getElementById('orderID').value.trim();
-    const driverName = document.getElementById('driverName').value;
+    const driverName = document.getElementById('driverName').value.split('-')[0].trim();
     const address = document.getElementById('address').value.trim();
 
     if (!orderID || !address) {
-      alert("يرجى ملء جميع الحقول");
+      alert("يرجى ملء جميع الحقول.");
       return;
     }
 
@@ -114,10 +203,10 @@
     const newRow = table.insertRow();
 
     newRow.innerHTML = `
-      <td data-label="رقم الطلب">${orderID}</td>
-      <td data-label="اسم الدلفري">${driverName}</td>
-      <td data-label="عنوان التوصيل">${address}</td>
-      <td data-label="الحالة">
+      <td data-label="رقم الطلب / Order ID">${orderID}</td>
+      <td data-label="اسم الدلفري / Driver Name">${driverName}</td>
+      <td data-label="عنوان التوصيل / Delivery Address">${address}</td>
+      <td data-label="الحالة / Status">
         <select onchange="updateStatus(this)">
           <option value="لم يُسلّم بعد">لم يُسلّم بعد</option>
           <option value="في الطريق">في الطريق</option>
@@ -125,12 +214,11 @@
           <option value="تأخير">تأخير</option>
         </select>
       </td>
-      <td data-label="الإجراءات">
-        <button onclick="deleteOrder(this)" style="background:#e74c3c;color:white;">🗑️ حذف</button>
+      <td data-label="الإجراءات / Actions">
+        <button onclick="deleteOrder(this)" class="btn-danger">🗑️ حذف / Delete</button>
       </td>
     `;
 
-    // مسح الحقول بعد الإضافة
     document.getElementById('orderID').value = '';
     document.getElementById('address').value = '';
   }
@@ -150,6 +238,17 @@
       const table = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
       table.innerHTML = '';
     }
+  }
+
+  function exportTableToExcel() {
+    const table = document.getElementById("ordersTable");
+    let html = table.outerHTML;
+    html = html.replace(/ /g, '%20');
+
+    const a = document.createElement("a");
+    a.href = 'data:application/vnd.ms-excel,' + html;
+    a.download = "تقرير_التوصيل.xls";
+    a.click();
   }
 </script>
 
