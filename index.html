@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام دلفري ريدان</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .delivery-status {
+            cursor: pointer;
+        }
+        .delivery-status.pending {
+            background-color: #fff3cd;
+        }
+        .delivery-status.in-progress {
+            background-color: #cce5ff;
+        }
+        .delivery-status.delivered {
+            background-color: #d4edda;
+        }
+        .delivery-status.cancelled {
+            background-color: #f8d7da;
+        }
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-center">نظام دلفري ريدان <span class="badge bg-secondary">v1.0</span></h1>
+                <div class="d-flex justify-content-between mb-3">
+                    <button class="btn btn-sm btn-outline-secondary" id="toggleLang">English</button>
+                    <div>
+                        <button class="btn btn-sm btn-danger me-2" id="clearAllBtn">مسح الكل</button>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addOrderModal">إضافة طلبية</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>رقم الطلبية</th>
+                                <th>اسم الدلفري</th>
+                                <th>عنوان التوصيل</th>
+                                <th>حالة التوصيل</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Order Modal -->
+    <div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addOrderModalLabel">إضافة طلبية جديدة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addOrderForm">
+                        <div class="mb-3">
+                            <label for="orderNumber" class="form-label">رقم الطلبية</label>
+                            <input type="text" class="form-control" id="orderNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deliveryName" class="form-label">اسم الدلفري</label>
+                            <select class="form-select" id="deliveryName" required>
+                                <option value="">اختر اسم الدلفري</option>
+                                <option value="شاهد">شاهد</option>
+                                <option value="نعيم">نعيم</option>
+                                <option value="حامد">حامد</option>
+                                <option value="منهاج">منهاج</option>
+                                <option value="محمد ارشد">محمد ارشد</option>
+                                <option value="قاسم">قاسم</option>
+                                <option value="منور علي">منور علي</option>
+                                <option value="أديب">أديب</option>
+                                <option value="شهرزاد">شهرزاد</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deliveryAddress" class="form-label">عنوان التوصيل</label>
+                            <textarea class="form-control" id="deliveryAddress" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveOrderBtn">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notificationToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">إشعار</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data
+        let orders = [
+            { id: 1, orderNumber: "ORD-1001", deliveryName: "شاهد", deliveryAddress: "شارع الملك فهد، الرياض", status: "pending" },
+            { id: 2, orderNumber: "ORD-1002", deliveryName: "نعيم", deliveryAddress: "حي النخيل، جدة", status: "in-progress" },
+            { id: 3, orderNumber: "ORD-1003", deliveryName: "حامد", deliveryAddress: "حي الرحمانية، الدمام", status: "delivered" }
+        ];
+
+        // Language support
+        let currentLang = 'ar';
+        const translations = {
+            ar: {
+                appTitle: "نظام دلفري ريدان",
+                orderNumber: "رقم الطلبية",
+                deliveryName: "اسم الدلفري",
+                deliveryAddress: "عنوان التوصيل",
+                deliveryStatus: "حالة التوصيل",
+                actions: "الإجراءات",
+                pending: "قيد الانتظار",
+                inProgress: "قيد التوصيل",
+                delivered: "تم التوصيل",
+                cancelled: "ملغاة",
+                addOrder: "إضافة طلبية",
+                clearAll: "مسح الكل",
+                delete: "حذف",
+                statusChangeNotification: "تم تغيير حالة الطلب {orderNumber} إلى {status}",
+                orderAddedNotification: "تمت إضافة الطلبية {orderNumber} بنجاح",
+                orderDeletedNotification: "تم حذف الطلبية {orderNumber}",
+                allOrdersClearedNotification: "تم مسح جميع الطلبيات",
+                confirmClearAll: "هل أنت متأكد من رغبتك في مسح جميع الطلبيات؟",
+                confirmDelete: "هل أنت متأكد من رغبتك في حذف هذه الطلبية؟"
+            },
+            en: {
+                appTitle: "Redan Delivery System",
+                orderNumber: "Order Number",
+                deliveryName: "Delivery Name",
+                deliveryAddress: "Delivery Address",
+                deliveryStatus: "Delivery Status",
+                actions: "Actions",
+                pending: "Pending",
+                inProgress: "In Progress",
+                delivered: "Delivered",
+                cancelled: "Cancelled",
+                addOrder: "Add Order",
+                clearAll: "Clear All",
+                delete: "Delete",
+                statusChangeNotification: "Order {orderNumber} status changed to {status}",
+                orderAddedNotification: "Order {orderNumber} added successfully",
+                orderDeletedNotification: "Order {orderNumber} deleted",
+                allOrdersClearedNotification: "All orders cleared",
+                confirmClearAll: "Are you sure you want to clear all orders?",
+                confirmDelete: "Are you sure you want to delete this order?"
+            }
+        };
+
+        // DOM elements
+        const ordersTable = document.getElementById('ordersTable');
+        const toggleLangBtn = document.getElementById('toggleLang');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const saveOrderBtn = document.getElementById('saveOrderBtn');
+        const notificationToast = new bootstrap.Toast(document.getElementById('notificationToast'));
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrders();
+            setupEventListeners();
+        });
+
+        // Render orders to the table
+        function renderOrders() {
+            ordersTable.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersTable.innerHTML = `<tr><td colspan="5" class="text-center">${currentLang === 'ar' ? 'لا توجد طلبيات' : 'No orders found'}</td></tr>`;
+                return;
+            }
+            
+            orders.forEach(order => {
+                const statusText = translations[currentLang][order.status.replace('-', '')] || order.status;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.orderNumber}</td>
+                    <td>${order.deliveryName}</td>
+                    <td>${order.deliveryAddress}</td>
+                    <td class="delivery-status ${order.status}" data-order-id="${order.id}" data-current-status="${order.status}">
+                        ${statusText}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger delete-order" data-order-id="${order.id}">
+                            ${translations[currentLang].delete}
+                        </button>
+                    </td>
+                `;
+                ordersTable.appendChild(row);
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Toggle language
+            toggleLangBtn.addEventListener('click', function() {
+                currentLang = currentLang === 'ar' ? 'en' : 'ar';
+                document.documentElement.lang = currentLang;
+                document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+                toggleLangBtn.textContent = currentLang === 'ar' ? 'English' : 'العربية';
+                document.title = translations[currentLang].appTitle;
+                renderOrders();
+            });
+
+            // Change delivery status
+            ordersTable.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delivery-status')) {
+                    const orderId = parseInt(e.target.getAttribute('data-order-id'));
+                    const currentStatus = e.target.getAttribute('data-current-status');
+                    const order = orders.find(o => o.id === orderId);
+                    
+                    let newStatus;
+                    switch(currentStatus) {
+                        case 'pending': newStatus = 'in-progress'; break;
+                        case 'in-progress': newStatus = 'delivered'; break;
+                        case 'delivered': newStatus = 'cancelled'; break;
+                        default: newStatus = 'pending';
+                    }
+                    
+                    order.status = newStatus;
+                    renderOrders();
+                    
+                    // Show notification
+                    const message = translations[currentLang].statusChangeNotification
+                        .replace('{orderNumber}', order.orderNumber)
+                        .replace('{status}', translations[currentLang][newStatus.replace('-', '')]);
+                    showNotification(message);
+                }
+            });
+
+            // Delete single order
+            ordersTable.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-order')) {
+                    const orderId = parseInt(e.target.getAttribute('data-order-id'));
+                    if (confirm(translations[currentLang].confirmDelete)) {
+                        deleteOrder(orderId);
+                    }
+                }
+            });
+
+            // Clear all orders
+            clearAllBtn.addEventListener('click', function() {
+                if (confirm(translations[currentLang].confirmClearAll)) {
+                    orders = [];
+                    renderOrders();
+                    showNotification(translations[currentLang].allOrdersClearedNotification);
+                }
+            });
+
+            // Save new order
+            saveOrderBtn.addEventListener('click', function() {
+                const orderNumber = document.getElementById('orderNumber').value;
+                const deliveryName = document.getElementById('deliveryName').value;
+                const deliveryAddress = document.getElementById('deliveryAddress').value;
+                
+                if (orderNumber && deliveryName && deliveryAddress) {
+                    const newOrder = {
+                        id: orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1,
+                        orderNumber,
+                        deliveryName,
+                        deliveryAddress,
+                        status: 'pending'
+                    };
+                    
+                    orders.push(newOrder);
+                    renderOrders();
+                    
+                    // Reset form and close modal
+                    document.getElementById('addOrderForm').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
+                    
+                    // Show notification
+                    const message = translations[currentLang].orderAddedNotification
+                        .replace('{orderNumber}', newOrder.orderNumber);
+                    showNotification(message);
+                }
+            });
+        }
+
+        // Delete an order
+        function deleteOrder(orderId) {
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                const orderNumber = orders[orderIndex].orderNumber;
+                orders.splice(orderIndex, 1);
+                renderOrders();
+                
+                // Show notification
+                const message = translations[currentLang].orderDeletedNotification
+                    .replace('{orderNumber}', orderNumber);
+                showNotification(message);
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            toastMessage.textContent = message;
+            notificationToast.show();
+        }
+    </script>
+</body>
+</html>
