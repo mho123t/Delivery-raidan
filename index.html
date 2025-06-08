@@ -3,131 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام تتبع توصيل الطلبات - الواتساب</title>
+    <title>نظام تتبع الموزعين - واتساب</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --whatsapp-green: #25D366;
+            --whatsapp-dark: #075E54;
+            --whatsapp-light: #128C7E;
+            --gray-light: #f5f5f5;
+            --gray-medium: #e0e0e0;
+            --gray-dark: #757575;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
+        body {
+            background-color: var(--gray-light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 100%;
+            padding: 15px;
         }
-        h1, h2 {
-            color: #075e54;
+        
+        header {
+            background-color: var(--whatsapp-dark);
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
             text-align: center;
-        }
-        .order-form {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .language-switch {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .language-btn {
+            background-color: white;
+            color: var(--whatsapp-dark);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .language-btn.active {
+            background-color: var(--whatsapp-light);
+            color: white;
+        }
+        
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+        
+        .delivery-person {
+            font-weight: bold;
+            color: var(--whatsapp-dark);
+        }
+        
+        .order-number {
+            background-color: var(--gray-light);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .order-details {
+            margin-bottom: 15px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            width: 100px;
+            color: var(--gray-dark);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .status-delivered {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .status-returned {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .btn-delivered {
+            background-color: var(--whatsapp-green);
+            color: white;
+        }
+        
+        .btn-returned {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background-color: var(--whatsapp-light);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .add-order-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
         .form-group {
             margin-bottom: 15px;
         }
-        label {
+        
+        .form-label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: var(--whatsapp-dark);
         }
-        select, input {
+        
+        .form-input, .form-select {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #075e54;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #128C7E;
-        }
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .orders-table th, .orders-table td {
-            border: 1px solid #ddd;
             padding: 10px;
-            text-align: center;
-        }
-        .orders-table th {
-            background-color: #075e54;
-            color: white;
-        }
-        .orders-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .status-pending {
-            color: #FFA500;
-            font-weight: bold;
-        }
-        .status-delivered {
-            color: #25D366;
-            font-weight: bold;
-        }
-        .status-returned {
-            color: #FF0000;
-            font-weight: bold;
-        }
-        .whatsapp-link {
-            color: #25D366;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .language-switch {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .language-btn {
-            background-color: #075e54;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin: 0 5px;
+            border: 1px solid var(--gray-medium);
             border-radius: 5px;
-            cursor: pointer;
+            font-size: 1rem;
         }
-        .rtl {
-            direction: rtl;
-            text-align: right;
+        
+        .btn-add {
+            background-color: var(--whatsapp-dark);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
         }
-        .ltr {
-            direction: ltr;
-            text-align: left;
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Animation for status change */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .order-card {
+            animation: fadeIn 0.3s ease-out;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <header>
+            <h1>نظام تتبع الموزعين</h1>
+            <p>إدارة طلبات التوصيل عبر واتساب</p>
+        </header>
+        
         <div class="language-switch">
-            <button class="language-btn" onclick="switchLanguage('ar')">العربية</button>
-            <button class="language-btn" onclick="switchLanguage('en')">English</button>
+            <button class="language-btn active" id="btn-ar">العربية</button>
+            <button class="language-btn" id="btn-en">English</button>
         </div>
-
-        <div id="arabic-version">
-            <h1>نظام تتبع توصيل الطلبات</h1>
-            <h2>إدارة فريق التوصيل عبر واتساب</h2>
-            
-            <div class="order-form rtl">
-                <h3>إضافة طلب جديد</h3>
+        
+        <!-- Arabic Version -->
+        <div id="ar-version">
+            <div class="add-order-form">
+                <h2><i class="fas fa-plus-circle"></i> إضافة طلب جديد</h2>
                 <div class="form-group">
-                    <label for="delivery-person-ar">اسم الموزع:</label>
-                    <select id="delivery-person-ar">
+                    <label class="form-label" for="ar-delivery-person">اسم الموزع</label>
+                    <select class="form-select" id="ar-delivery-person">
                         <option value="">-- اختر الموزع --</option>
                         <option value="شاهد">شاهد</option>
                         <option value="حامد">حامد</option>
@@ -141,40 +262,27 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="order-number-ar">رقم الطلب:</label>
-                    <input type="text" id="order-number-ar" placeholder="أدخل رقم الطلب">
+                    <label class="form-label" for="ar-order-number">رقم الطلب</label>
+                    <input type="text" class="form-input" id="ar-order-number" placeholder="أدخل رقم الطلب">
                 </div>
-                <button onclick="addOrder('ar')">إضافة طلب</button>
+                <button class="btn btn-add" onclick="addOrder('ar')">
+                    <i class="fas fa-plus"></i> إضافة طلب
+                </button>
             </div>
             
-            <h3>قائمة الطلبات</h3>
-            <table class="orders-table rtl">
-                <thead>
-                    <tr>
-                        <th>اسم الموزع</th>
-                        <th>رقم الطلب</th>
-                        <th>حالة التوصيل</th>
-                        <th>وقت بدء التوصيل</th>
-                        <th>وقت الإكمال</th>
-                        <th>وقت العودة</th>
-                        <th>إجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="orders-list-ar">
-                    <!-- Orders will be added here dynamically -->
-                </tbody>
-            </table>
+            <h2><i class="fas fa-list"></i> قائمة الطلبات</h2>
+            <div id="ar-orders-list">
+                <!-- Orders will be added here dynamically -->
+            </div>
         </div>
-
-        <div id="english-version" style="display:none;">
-            <h1>Delivery Tracking System</h1>
-            <h2>WhatsApp Delivery Team Management</h2>
-            
-            <div class="order-form ltr">
-                <h3>Add New Order</h3>
+        
+        <!-- English Version -->
+        <div id="en-version" class="hidden">
+            <div class="add-order-form">
+                <h2><i class="fas fa-plus-circle"></i> Add New Order</h2>
                 <div class="form-group">
-                    <label for="delivery-person-en">Delivery Person:</label>
-                    <select id="delivery-person-en">
+                    <label class="form-label" for="en-delivery-person">Delivery Person</label>
+                    <select class="form-select" id="en-delivery-person">
                         <option value="">-- Select Delivery Person --</option>
                         <option value="Shahid">Shahid</option>
                         <option value="Hamed">Hamed</option>
@@ -188,136 +296,202 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="order-number-en">Order Number:</label>
-                    <input type="text" id="order-number-en" placeholder="Enter order number">
+                    <label class="form-label" for="en-order-number">Order Number</label>
+                    <input type="text" class="form-input" id="en-order-number" placeholder="Enter order number">
                 </div>
-                <button onclick="addOrder('en')">Add Order</button>
+                <button class="btn btn-add" onclick="addOrder('en')">
+                    <i class="fas fa-plus"></i> Add Order
+                </button>
             </div>
             
-            <h3>Orders List</h3>
-            <table class="orders-table ltr">
-                <thead>
-                    <tr>
-                        <th>Delivery Person</th>
-                        <th>Order Number</th>
-                        <th>Delivery Status</th>
-                        <th>Start Time</th>
-                        <th>Completion Time</th>
-                        <th>Return Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="orders-list-en">
-                    <!-- Orders will be added here dynamically -->
-                </tbody>
-            </table>
+            <h2><i class="fas fa-list"></i> Orders List</h2>
+            <div id="en-orders-list">
+                <!-- Orders will be added here dynamically -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Sample data storage (in a real app, you would use a database)
-        let orders = [];
+        // Sample data storage
+        let orders = [
+            {
+                id: 1,
+                deliveryPerson: 'شاهد',
+                orderNumber: 'ORD-1001',
+                status: 'تم التوصيل',
+                startTime: '10:00 ص',
+                completionTime: '10:45 ص',
+                returnTime: '',
+                whatsapp: '971588155123'
+            },
+            {
+                id: 2,
+                deliveryPerson: 'حامد',
+                orderNumber: 'ORD-1002',
+                status: 'قيد التوصيل',
+                startTime: '11:30 ص',
+                completionTime: '',
+                returnTime: '',
+                whatsapp: '971588155123'
+            }
+        ];
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateOrdersList('ar');
+            updateOrdersList('en');
+            
+            // Language switch
+            document.getElementById('btn-ar').addEventListener('click', function() {
+                switchLanguage('ar');
+            });
+            
+            document.getElementById('btn-en').addEventListener('click', function() {
+                switchLanguage('en');
+            });
+        });
         
         function switchLanguage(lang) {
             if (lang === 'ar') {
-                document.getElementById('arabic-version').style.display = 'block';
-                document.getElementById('english-version').style.display = 'none';
+                document.getElementById('ar-version').classList.remove('hidden');
+                document.getElementById('en-version').classList.add('hidden');
+                document.getElementById('btn-ar').classList.add('active');
+                document.getElementById('btn-en').classList.remove('active');
                 document.documentElement.lang = 'ar';
                 document.documentElement.dir = 'rtl';
             } else {
-                document.getElementById('arabic-version').style.display = 'none';
-                document.getElementById('english-version').style.display = 'block';
+                document.getElementById('ar-version').classList.add('hidden');
+                document.getElementById('en-version').classList.remove('hidden');
+                document.getElementById('btn-ar').classList.remove('active');
+                document.getElementById('btn-en').classList.add('active');
                 document.documentElement.lang = 'en';
                 document.documentElement.dir = 'ltr';
             }
         }
         
         function addOrder(lang) {
-            const deliveryPerson = document.getElementById(`delivery-person-${lang}`).value;
-            const orderNumber = document.getElementById(`order-number-${lang}`).value;
+            const deliveryPerson = document.getElementById(`${lang}-delivery-person`).value;
+            const orderNumber = document.getElementById(`${lang}-order-number`).value;
             
             if (!deliveryPerson || !orderNumber) {
                 alert(lang === 'ar' ? 'الرجاء إدخال جميع البيانات' : 'Please fill all fields');
                 return;
             }
             
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
             const newOrder = {
                 id: Date.now(),
                 deliveryPerson: deliveryPerson,
                 orderNumber: orderNumber,
                 status: lang === 'ar' ? 'قيد التوصيل' : 'Pending',
-                startTime: new Date().toLocaleTimeString(),
+                startTime: timeString,
                 completionTime: '',
-                returnTime: ''
+                returnTime: '',
+                whatsapp: '971588155123' // Default number, you can customize per delivery person
             };
             
             orders.push(newOrder);
             updateOrdersList(lang);
             
             // Clear form
-            document.getElementById(`delivery-person-${lang}`).value = '';
-            document.getElementById(`order-number-${lang}`).value = '';
+            document.getElementById(`${lang}-delivery-person`).value = '';
+            document.getElementById(`${lang}-order-number`).value = '';
             
-            // Send WhatsApp message (simulated)
+            // Send WhatsApp message
             const whatsappMessage = lang === 'ar' 
-                ? `تم تعيين طلب جديد لك (رقم: ${orderNumber})` 
-                : `New order assigned to you (No: ${orderNumber})`;
-            sendWhatsAppMessage(deliveryPerson, whatsappMessage);
+                ? `مرحباً ${deliveryPerson}، تم تعيين طلب جديد لك (رقم: ${orderNumber}). الرجاء البدء بالتوصيل.` 
+                : `Hello ${deliveryPerson}, new order assigned to you (No: ${orderNumber}). Please start delivery.`;
+            
+            sendWhatsAppMessage(newOrder.whatsapp, whatsappMessage);
         }
         
         function updateOrdersList(lang) {
-            const ordersList = document.getElementById(`orders-list-${lang}`);
+            const ordersList = document.getElementById(`${lang}-orders-list`);
             ordersList.innerHTML = '';
             
+            if (orders.length === 0) {
+                ordersList.innerHTML = `<p style="text-align: center; color: var(--gray-dark);">${
+                    lang === 'ar' ? 'لا توجد طلبات متاحة' : 'No orders available'
+                }</p>`;
+                return;
+            }
+            
             orders.forEach(order => {
-                const row = document.createElement('tr');
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
                 
-                // Determine status class
-                let statusClass = '';
+                // Determine status class and text
+                let statusClass, statusText;
                 if (order.status.includes('Pending') || order.status.includes('قيد')) {
                     statusClass = 'status-pending';
+                    statusText = lang === 'ar' ? 'قيد التوصيل' : 'Pending';
                 } else if (order.status.includes('Delivered') || order.status.includes('تم')) {
                     statusClass = 'status-delivered';
+                    statusText = lang === 'ar' ? 'تم التوصيل' : 'Delivered';
                 } else if (order.status.includes('Returned') || order.status.includes('عود')) {
                     statusClass = 'status-returned';
+                    statusText = lang === 'ar' ? 'عودة' : 'Returned';
                 }
                 
-                row.innerHTML = `
-                    <td>${order.deliveryPerson}</td>
-                    <td>${order.orderNumber}</td>
-                    <td class="${statusClass}">${order.status}</td>
-                    <td>${order.startTime}</td>
-                    <td>${order.completionTime || '-'}</td>
-                    <td>${order.returnTime || '-'}</td>
-                    <td>
-                        <button onclick="updateStatus('${order.id}', 'delivered', '${lang}')">
-                            ${lang === 'ar' ? 'تم التوصيل' : 'Delivered'}
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <span class="delivery-person">${order.deliveryPerson}</span>
+                        <span class="order-number">${order.orderNumber}</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="detail-row">
+                            <span class="detail-label">${lang === 'ar' ? 'الحالة' : 'Status'}</span>
+                            <span class="status ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${lang === 'ar' ? 'وقت البدء' : 'Start Time'}</span>
+                            <span>${order.startTime}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${lang === 'ar' ? 'وقت الإكمال' : 'Completion Time'}</span>
+                            <span>${order.completionTime || '-'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${lang === 'ar' ? 'وقت العودة' : 'Return Time'}</span>
+                            <span>${order.returnTime || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-delivered" onclick="updateOrderStatus(${order.id}, 'delivered', '${lang}')">
+                            <i class="fas fa-check"></i> ${lang === 'ar' ? 'تم التوصيل' : 'Delivered'}
                         </button>
-                        <button onclick="updateStatus('${order.id}', 'returned', '${lang}')">
-                            ${lang === 'ar' ? 'عودة' : 'Returned'}
+                        <button class="btn btn-returned" onclick="updateOrderStatus(${order.id}, 'returned', '${lang}')">
+                            <i class="fas fa-undo"></i> ${lang === 'ar' ? 'عودة' : 'Returned'}
                         </button>
-                        <a href="https://wa.me/971588155123" class="whatsapp-link" target="_blank">
-                            ${lang === 'ar' ? 'واتساب' : 'WhatsApp'}
+                        <a href="https://wa.me/${order.whatsapp}?text=${encodeURIComponent(
+                            lang === 'ar' 
+                                ? `مرحباً ${order.deliveryPerson}، تحديث بخصوص الطلب ${order.orderNumber}`
+                                : `Hello ${order.deliveryPerson}, update about order ${order.orderNumber}`
+                        )}" class="btn btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> ${lang === 'ar' ? 'واتساب' : 'WhatsApp'}
                         </a>
-                    </td>
+                    </div>
                 `;
                 
-                ordersList.appendChild(row);
+                ordersList.appendChild(orderCard);
             });
         }
         
-        function updateStatus(orderId, status, lang) {
+        function updateOrderStatus(orderId, status, lang) {
             const order = orders.find(o => o.id == orderId);
             if (!order) return;
             
-            const now = new Date().toLocaleTimeString();
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             if (status === 'delivered') {
                 order.status = lang === 'ar' ? 'تم التوصيل' : 'Delivered';
-                order.completionTime = now;
+                order.completionTime = timeString;
             } else if (status === 'returned') {
                 order.status = lang === 'ar' ? 'عودة' : 'Returned';
-                order.returnTime = now;
+                order.returnTime = timeString;
             }
             
             updateOrdersList(lang);
@@ -328,42 +502,16 @@
                 : (status === 'delivered' ? 'Order delivered' : 'Order returned');
             
             const whatsappMessage = lang === 'ar' 
-                ? `تحديث حالة الطلب ${order.orderNumber}: ${statusMsg}` 
-                : `Order ${order.orderNumber} update: ${statusMsg}`;
+                ? `تحديث حالة الطلب ${order.orderNumber}: ${statusMsg} في الساعة ${timeString}` 
+                : `Order ${order.orderNumber} update: ${statusMsg} at ${timeString}`;
             
-            sendWhatsAppMessage(order.deliveryPerson, whatsappMessage);
+            sendWhatsAppMessage(order.whatsapp, whatsappMessage);
         }
         
-        function sendWhatsAppMessage(deliveryPerson, message) {
-            // In a real implementation, this would send an actual WhatsApp message
-            console.log(`WhatsApp message to ${deliveryPerson}: ${message}`);
-            // window.open(`https://wa.me/971588155123?text=${encodeURIComponent(message)}`, '_blank');
+        function sendWhatsAppMessage(phoneNumber, message) {
+            // Open WhatsApp with pre-filled message
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
-        
-        // Initialize with some sample data
-        orders = [
-            {
-                id: 1,
-                deliveryPerson: 'شاهد',
-                orderNumber: 'ORD-1001',
-                status: 'تم التوصيل',
-                startTime: '10:00:00',
-                completionTime: '10:45:00',
-                returnTime: ''
-            },
-            {
-                id: 2,
-                deliveryPerson: 'حامد',
-                orderNumber: 'ORD-1002',
-                status: 'قيد التوصيل',
-                startTime: '11:30:00',
-                completionTime: '',
-                returnTime: ''
-            }
-        ];
-        
-        // Initialize the page
-        updateOrdersList('ar');
     </script>
 </body>
 </html>
