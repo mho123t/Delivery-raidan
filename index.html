@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التواصل الإداري عبر واتساب</title>
+    <title>نظام تتبع توصيل الطلبات - الواتساب</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,7 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background-color: white;
             padding: 20px;
@@ -23,41 +23,71 @@
             color: #075e54;
             text-align: center;
         }
-        .team-member {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .order-form {
             background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        .team-member img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-left: 15px;
-            object-fit: cover;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .team-member .info {
-            flex: 1;
-        }
-        .team-member .name {
-            font-weight: bold;
+        label {
+            display: block;
             margin-bottom: 5px;
+            font-weight: bold;
         }
-        .whatsapp-btn {
-            background-color: #25D366;
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #075e54;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
+            font-size: 16px;
         }
-        .whatsapp-btn:hover {
+        button:hover {
             background-color: #128C7E;
+        }
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .orders-table th, .orders-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .orders-table th {
+            background-color: #075e54;
+            color: white;
+        }
+        .orders-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .status-pending {
+            color: #FFA500;
+            font-weight: bold;
+        }
+        .status-delivered {
+            color: #25D366;
+            font-weight: bold;
+        }
+        .status-returned {
+            color: #FF0000;
+            font-weight: bold;
+        }
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            font-weight: bold;
         }
         .language-switch {
             text-align: center;
@@ -90,161 +120,104 @@
         </div>
 
         <div id="arabic-version">
-            <h1>نظام التواصل الإداري عبر واتساب</h1>
-            <h2>قائمة أعضاء الفريق الإداري</h2>
+            <h1>نظام تتبع توصيل الطلبات</h1>
+            <h2>إدارة فريق التوصيل عبر واتساب</h2>
             
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="شاهد">
-                <div class="info">
-                    <div class="name">شاهد</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
+            <div class="order-form rtl">
+                <h3>إضافة طلب جديد</h3>
+                <div class="form-group">
+                    <label for="delivery-person-ar">اسم الموزع:</label>
+                    <select id="delivery-person-ar">
+                        <option value="">-- اختر الموزع --</option>
+                        <option value="شاهد">شاهد</option>
+                        <option value="حامد">حامد</option>
+                        <option value="منهاج">منهاج</option>
+                        <option value="نعيم">نعيم</option>
+                        <option value="ارشد">ارشد</option>
+                        <option value="قاسم">قاسم</option>
+                        <option value="شهرزاد">شهرزاد</option>
+                        <option value="أديب">أديب</option>
+                        <option value="منور علي">منور علي</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label for="order-number-ar">رقم الطلب:</label>
+                    <input type="text" id="order-number-ar" placeholder="أدخل رقم الطلب">
+                </div>
+                <button onclick="addOrder('ar')">إضافة طلب</button>
             </div>
             
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="حامد">
-                <div class="info">
-                    <div class="name">حامد</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="منهاج">
-                <div class="info">
-                    <div class="name">منهاج</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="نعيم">
-                <div class="info">
-                    <div class="name">نعيم</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="ارشد">
-                <div class="info">
-                    <div class="name">ارشد</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="قاسم">
-                <div class="info">
-                    <div class="name">قاسم</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="شهرزاد">
-                <div class="info">
-                    <div class="name">شهرزاد</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="أديب">
-                <div class="info">
-                    <div class="name">أديب</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
-            
-            <div class="team-member rtl">
-                <img src="https://via.placeholder.com/50" alt="منور علي">
-                <div class="info">
-                    <div class="name">منور علي</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">تواصل عبر واتساب</a>
-                </div>
-            </div>
+            <h3>قائمة الطلبات</h3>
+            <table class="orders-table rtl">
+                <thead>
+                    <tr>
+                        <th>اسم الموزع</th>
+                        <th>رقم الطلب</th>
+                        <th>حالة التوصيل</th>
+                        <th>وقت بدء التوصيل</th>
+                        <th>وقت الإكمال</th>
+                        <th>وقت العودة</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list-ar">
+                    <!-- Orders will be added here dynamically -->
+                </tbody>
+            </table>
         </div>
 
         <div id="english-version" style="display:none;">
-            <h1>Administrative WhatsApp Contact System</h1>
-            <h2>Administrative Team Members</h2>
+            <h1>Delivery Tracking System</h1>
+            <h2>WhatsApp Delivery Team Management</h2>
             
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Shahid">
-                <div class="info">
-                    <div class="name">Shahid</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
+            <div class="order-form ltr">
+                <h3>Add New Order</h3>
+                <div class="form-group">
+                    <label for="delivery-person-en">Delivery Person:</label>
+                    <select id="delivery-person-en">
+                        <option value="">-- Select Delivery Person --</option>
+                        <option value="Shahid">Shahid</option>
+                        <option value="Hamed">Hamed</option>
+                        <option value="Minhaj">Minhaj</option>
+                        <option value="Naeem">Naeem</option>
+                        <option value="Arshad">Arshad</option>
+                        <option value="Qasim">Qasim</option>
+                        <option value="Shahrzad">Shahrzad</option>
+                        <option value="Adeeb">Adeeb</option>
+                        <option value="Munawar Ali">Munawar Ali</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label for="order-number-en">Order Number:</label>
+                    <input type="text" id="order-number-en" placeholder="Enter order number">
+                </div>
+                <button onclick="addOrder('en')">Add Order</button>
             </div>
             
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Hamed">
-                <div class="info">
-                    <div class="name">Hamed</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Minhaj">
-                <div class="info">
-                    <div class="name">Minhaj</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Naeem">
-                <div class="info">
-                    <div class="name">Naeem</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Arshad">
-                <div class="info">
-                    <div class="name">Arshad</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Qasim">
-                <div class="info">
-                    <div class="name">Qasim</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Shahrzad">
-                <div class="info">
-                    <div class="name">Shahrzad</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Adeeb">
-                <div class="info">
-                    <div class="name">Adeeb</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
-            
-            <div class="team-member ltr">
-                <img src="https://via.placeholder.com/50" alt="Munawar Ali">
-                <div class="info">
-                    <div class="name">Munawar Ali</div>
-                    <a href="https://wa.me/971588155123" class="whatsapp-btn">Contact via WhatsApp</a>
-                </div>
-            </div>
+            <h3>Orders List</h3>
+            <table class="orders-table ltr">
+                <thead>
+                    <tr>
+                        <th>Delivery Person</th>
+                        <th>Order Number</th>
+                        <th>Delivery Status</th>
+                        <th>Start Time</th>
+                        <th>Completion Time</th>
+                        <th>Return Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list-en">
+                    <!-- Orders will be added here dynamically -->
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
+        // Sample data storage (in a real app, you would use a database)
+        let orders = [];
+        
         function switchLanguage(lang) {
             if (lang === 'ar') {
                 document.getElementById('arabic-version').style.display = 'block';
@@ -258,6 +231,139 @@
                 document.documentElement.dir = 'ltr';
             }
         }
+        
+        function addOrder(lang) {
+            const deliveryPerson = document.getElementById(`delivery-person-${lang}`).value;
+            const orderNumber = document.getElementById(`order-number-${lang}`).value;
+            
+            if (!deliveryPerson || !orderNumber) {
+                alert(lang === 'ar' ? 'الرجاء إدخال جميع البيانات' : 'Please fill all fields');
+                return;
+            }
+            
+            const newOrder = {
+                id: Date.now(),
+                deliveryPerson: deliveryPerson,
+                orderNumber: orderNumber,
+                status: lang === 'ar' ? 'قيد التوصيل' : 'Pending',
+                startTime: new Date().toLocaleTimeString(),
+                completionTime: '',
+                returnTime: ''
+            };
+            
+            orders.push(newOrder);
+            updateOrdersList(lang);
+            
+            // Clear form
+            document.getElementById(`delivery-person-${lang}`).value = '';
+            document.getElementById(`order-number-${lang}`).value = '';
+            
+            // Send WhatsApp message (simulated)
+            const whatsappMessage = lang === 'ar' 
+                ? `تم تعيين طلب جديد لك (رقم: ${orderNumber})` 
+                : `New order assigned to you (No: ${orderNumber})`;
+            sendWhatsAppMessage(deliveryPerson, whatsappMessage);
+        }
+        
+        function updateOrdersList(lang) {
+            const ordersList = document.getElementById(`orders-list-${lang}`);
+            ordersList.innerHTML = '';
+            
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                
+                // Determine status class
+                let statusClass = '';
+                if (order.status.includes('Pending') || order.status.includes('قيد')) {
+                    statusClass = 'status-pending';
+                } else if (order.status.includes('Delivered') || order.status.includes('تم')) {
+                    statusClass = 'status-delivered';
+                } else if (order.status.includes('Returned') || order.status.includes('عود')) {
+                    statusClass = 'status-returned';
+                }
+                
+                row.innerHTML = `
+                    <td>${order.deliveryPerson}</td>
+                    <td>${order.orderNumber}</td>
+                    <td class="${statusClass}">${order.status}</td>
+                    <td>${order.startTime}</td>
+                    <td>${order.completionTime || '-'}</td>
+                    <td>${order.returnTime || '-'}</td>
+                    <td>
+                        <button onclick="updateStatus('${order.id}', 'delivered', '${lang}')">
+                            ${lang === 'ar' ? 'تم التوصيل' : 'Delivered'}
+                        </button>
+                        <button onclick="updateStatus('${order.id}', 'returned', '${lang}')">
+                            ${lang === 'ar' ? 'عودة' : 'Returned'}
+                        </button>
+                        <a href="https://wa.me/971588155123" class="whatsapp-link" target="_blank">
+                            ${lang === 'ar' ? 'واتساب' : 'WhatsApp'}
+                        </a>
+                    </td>
+                `;
+                
+                ordersList.appendChild(row);
+            });
+        }
+        
+        function updateStatus(orderId, status, lang) {
+            const order = orders.find(o => o.id == orderId);
+            if (!order) return;
+            
+            const now = new Date().toLocaleTimeString();
+            
+            if (status === 'delivered') {
+                order.status = lang === 'ar' ? 'تم التوصيل' : 'Delivered';
+                order.completionTime = now;
+            } else if (status === 'returned') {
+                order.status = lang === 'ar' ? 'عودة' : 'Returned';
+                order.returnTime = now;
+            }
+            
+            updateOrdersList(lang);
+            
+            // Send WhatsApp notification
+            const statusMsg = lang === 'ar' 
+                ? (status === 'delivered' ? 'تم توصيل الطلب' : 'تمت عودة الطلب')
+                : (status === 'delivered' ? 'Order delivered' : 'Order returned');
+            
+            const whatsappMessage = lang === 'ar' 
+                ? `تحديث حالة الطلب ${order.orderNumber}: ${statusMsg}` 
+                : `Order ${order.orderNumber} update: ${statusMsg}`;
+            
+            sendWhatsAppMessage(order.deliveryPerson, whatsappMessage);
+        }
+        
+        function sendWhatsAppMessage(deliveryPerson, message) {
+            // In a real implementation, this would send an actual WhatsApp message
+            console.log(`WhatsApp message to ${deliveryPerson}: ${message}`);
+            // window.open(`https://wa.me/971588155123?text=${encodeURIComponent(message)}`, '_blank');
+        }
+        
+        // Initialize with some sample data
+        orders = [
+            {
+                id: 1,
+                deliveryPerson: 'شاهد',
+                orderNumber: 'ORD-1001',
+                status: 'تم التوصيل',
+                startTime: '10:00:00',
+                completionTime: '10:45:00',
+                returnTime: ''
+            },
+            {
+                id: 2,
+                deliveryPerson: 'حامد',
+                orderNumber: 'ORD-1002',
+                status: 'قيد التوصيل',
+                startTime: '11:30:00',
+                completionTime: '',
+                returnTime: ''
+            }
+        ];
+        
+        // Initialize the page
+        updateOrdersList('ar');
     </script>
 </body>
 </html>
