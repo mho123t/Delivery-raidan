@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* (same as previous, keep all styles) */
         * {
             margin: 0;
             padding: 0;
@@ -62,7 +63,6 @@
             box-shadow: var(--shadow), 0 0 0 1px rgba(212, 175, 55, 0.06) inset;
             transition: all .3s;
         }
-        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
@@ -153,7 +153,6 @@
             transform: scale(1.02);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
         }
-        /* MAIN GRID - left: form, right: drivers grid */
         .main-grid {
             display: grid;
             grid-template-columns: 340px 1fr;
@@ -165,7 +164,6 @@
                 gap: 24px;
             }
         }
-        /* CARDS */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(8px);
@@ -214,7 +212,6 @@
             font-size: .75rem;
             margin-right: 6px;
         }
-        /* FORM */
         .form-group {
             margin-bottom: 18px;
         }
@@ -296,10 +293,9 @@
             background: rgba(212, 175, 55, 0.08);
             border-color: var(--gold);
         }
-        /* ===== DRIVERS GRID ===== */
         .drivers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             gap: 16px;
             max-height: 500px;
             overflow-y: auto;
@@ -383,6 +379,24 @@
             display: inline-block;
             border: 1px solid rgba(212, 175, 55, 0.05);
         }
+        .driver-card .dstatus {
+            font-size: .65rem;
+            font-weight: 700;
+            margin-top: 4px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .driver-card .dstatus.available {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        .driver-card .dstatus.out {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
         .driver-card .dorders {
             font-size: .75rem;
             color: var(--text-muted);
@@ -443,7 +457,6 @@
             color: var(--gold);
             background: rgba(0, 0, 0, 0.6);
         }
-        /* QUEUE BAR */
         .queue-bar {
             background: rgba(0, 0, 0, 0.35);
             padding: 12px 18px;
@@ -479,7 +492,6 @@
             border-radius: 30px;
             border: 1px solid rgba(212, 175, 55, 0.04);
         }
-        /* ACTIVE ORDERS - small list */
         .active-orders-mini {
             margin-top: 16px;
             max-height: 140px;
@@ -521,7 +533,6 @@
         .active-orders-mini .order-mini .oreturn:hover {
             transform: scale(1.05);
         }
-        /* ADMIN OVERLAY */
         .admin-overlay {
             display: none;
             position: fixed;
@@ -684,6 +695,22 @@
             font-weight: 600;
             color: var(--text);
         }
+        .admin-driver-row .info .status-badge {
+            font-size: .6rem;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+        .admin-driver-row .info .status-badge.available {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        .admin-driver-row .info .status-badge.out {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
         .admin-driver-row .actions i {
             margin: 0 4px;
             cursor: pointer;
@@ -764,7 +791,6 @@
             padding: 10px 16px;
             font-size: .8rem;
         }
-        /* TOAST */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -811,7 +837,6 @@
             color: rgba(212, 175, 55, 0.2);
             margin: 0 4px;
         }
-        /* PRINT */
         @media print {
             body * {
                 visibility: hidden;
@@ -893,7 +918,6 @@
         .wrap {
             flex-wrap: wrap;
         }
-        /* RTL / LTR */
         .lang-en {
             direction: ltr;
         }
@@ -936,7 +960,6 @@
             margin-left: 0;
             margin-right: 4px;
         }
-        /* animation for selected driver */
         @keyframes pulse-gold {
             0%,
             100% {
@@ -1103,16 +1126,16 @@
         (function() {
             // ===== DATA =====
             let drivers = [
-                { id: 1, name: 'شهزاد', orders: 0, image: '', hidden: false },
-                { id: 2, name: 'إنعام', orders: 0, image: '', hidden: false },
-                { id: 3, name: 'أديب', orders: 0, image: '', hidden: false },
-                { id: 4, name: 'أرشد', orders: 0, image: '', hidden: false },
-                { id: 5, name: 'منور', orders: 0, image: '', hidden: false },
-                { id: 6, name: 'نعيم', orders: 0, image: '', hidden: false },
-                { id: 7, name: 'شاهد', orders: 0, image: '', hidden: false },
-                { id: 8, name: 'نعيم الدين', orders: 0, image: '', hidden: false }
+                { id: 1, name: 'شهزاد', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 2, name: 'إنعام', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 3, name: 'أديب', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 4, name: 'أرشد', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 5, name: 'منور', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 6, name: 'نعيم', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 7, name: 'شاهد', orders: 0, image: '', hidden: false, status: 'متاح' },
+                { id: 8, name: 'نعيم الدين', orders: 0, image: '', hidden: false, status: 'متاح' }
             ];
-            let orders = []; // { id, driverId, driverName, orderNumber, type, time, returnTime, status }
+            let orders = [];
             let archive = [];
             let nextOrderId = 1;
             let currentLang = 'ar';
@@ -1171,6 +1194,8 @@
                         orderExists: 'رقم الطلب مستخدم بالفعل',
                         hide: 'إخفاء',
                         show: 'إظهار',
+                        available: 'متاح',
+                        out: 'خارج للتوصيل',
                     },
                     en: {
                         brandTitle: 'Redan Mandi',
@@ -1222,6 +1247,8 @@
                         orderExists: 'Order number already used',
                         hide: 'Hide',
                         show: 'Show',
+                        available: 'Available',
+                        out: 'Out for Delivery',
                     }
                 };
                 return map[currentLang]?.[key] || key;
@@ -1245,8 +1272,8 @@
                         orders = data.orders || [];
                         archive = data.archive || [];
                         nextOrderId = data.nextOrderId || 1;
-                        // ensure hidden property
-                        drivers.forEach(d => { if (d.hidden === undefined) d.hidden = false; });
+                        drivers.forEach(d => { if (d.hidden === undefined) d.hidden = false; if (d.status === undefined) d
+                                .status = 'متاح'; });
                     }
                 } catch (e) {}
             }
@@ -1259,9 +1286,21 @@
                 tEl._hide = setTimeout(() => tEl.classList.remove('show'), duration);
             }
 
+            function getActiveOrdersForDriver(driverId) {
+                return orders.filter(o => o.driverId === driverId && o.status === 'في التوصيل');
+            }
+
             function getOrderNumbersForDriver(driverId) {
-                return orders.filter(o => o.driverId === driverId && o.status === 'في التوصيل')
-                    .map(o => o.orderNumber);
+                return getActiveOrdersForDriver(driverId).map(o => o.orderNumber);
+            }
+
+            function updateDriverStatus(driverId) {
+                const driver = drivers.find(d => d.id === driverId);
+                if (!driver) return;
+                const active = getActiveOrdersForDriver(driverId);
+                driver.status = active.length > 0 ? 'خارج للتوصيل' : 'متاح';
+                // also update orders count to reflect active orders count
+                driver.orders = active.length;
             }
 
             function isOrderNumberUsed(num) {
@@ -1298,6 +1337,8 @@
                     const orderNumbersHtml = orderNums.length > 0 ?
                         `<div class="order-numbers">${orderNums.map(n => `<span>#${n}</span>`).join('')}</div>` :
                         '';
+                    const statusClass = d.status === 'متاح' ? 'available' : 'out';
+                    const statusText = d.status === 'متاح' ? t('available') : t('out');
                     card.innerHTML = `
                         <button class="toggle-vis" data-id="${d.id}" title="${isHidden ? t('show') : t('hide')}">
                             <i class="fas ${isHidden ? 'fa-eye' : 'fa-eye-slash'}"></i>
@@ -1305,12 +1346,12 @@
                         <div class="avatar"><img src="${imgSrc}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="${d.name}"></div>
                         <div class="dname">${d.name}</div>
                         <div class="dbadge">#${drivers.indexOf(d)+1}</div>
+                        <div class="dstatus ${statusClass}">${statusText}</div>
                         <div class="dorders"><i class="fas fa-box"></i> ${d.orders} ${d.orders === 1 ? 'طلب' : 'طلبات'}</div>
                         ${orderNumbersHtml}
                     `;
                     grid.appendChild(card);
 
-                    // Click on card -> select driver + focus order number
                     card.addEventListener('click', function(e) {
                         if (e.target.closest('.toggle-vis')) return;
                         const id = parseInt(this.dataset.id);
@@ -1318,7 +1359,6 @@
                         document.getElementById('orderNumber').focus();
                     });
 
-                    // Toggle visibility
                     const toggleBtn = card.querySelector('.toggle-vis');
                     toggleBtn.addEventListener('click', function(e) {
                         e.stopPropagation();
@@ -1349,7 +1389,6 @@
                 selectedDriverId = id;
                 document.getElementById('driverSelect').value = id;
                 renderAll();
-                // scroll to card
                 const card = document.querySelector(`.driver-card[data-id="${id}"]`);
                 if (card) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1363,7 +1402,8 @@
                 drivers.filter(d => !d.hidden).forEach(d => {
                     const opt = document.createElement('option');
                     opt.value = d.id;
-                    opt.textContent = `${d.name} (${d.orders})`;
+                    const statusText = d.status === 'متاح' ? '🟢' : '🔴';
+                    opt.textContent = `${d.name} (${d.orders}) ${statusText}`;
                     sel.appendChild(opt);
                 });
                 if (selectedDriverId && drivers.some(d => d.id === selectedDriverId && !d.hidden)) {
@@ -1377,7 +1417,6 @@
                 } else {
                     selectedDriverId = null;
                 }
-                // update selected class
                 document.querySelectorAll('.driver-card').forEach(c => {
                     c.classList.toggle('selected', parseInt(c.dataset.id) === selectedDriverId);
                 });
@@ -1419,7 +1458,6 @@
             }
 
             function updateSelectedDriver() {
-                // sync select with selectedDriverId
                 const sel = document.getElementById('driverSelect');
                 if (selectedDriverId && drivers.some(d => d.id === selectedDriverId && !d.hidden)) {
                     sel.value = selectedDriverId;
@@ -1434,7 +1472,6 @@
 
             // ===== ADMIN RENDER =====
             function renderAdmin() {
-                // Driver list in admin
                 const adminList = document.getElementById('adminDriverList');
                 adminList.innerHTML = '';
                 drivers.forEach((d, idx) => {
@@ -1443,12 +1480,15 @@
                     const row = document.createElement('div');
                     row.className = 'admin-driver-row';
                     const isHidden = d.hidden === true;
+                    const statusClass = d.status === 'متاح' ? 'available' : 'out';
+                    const statusText = d.status === 'متاح' ? t('available') : t('out');
                     row.innerHTML = `
                         <div class="info">
                             <img src="${imgSrc}" alt="${d.name}">
                             <span class="num">#${idx+1}</span>
                             <span class="dname">${d.name}</span>
                             <span class="badge-gold">${d.orders}</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
                             ${isHidden ? '<span style="color:#6a5f4a;font-size:.65rem;">[مخفي]</span>' : ''}
                         </div>
                         <div class="actions">
@@ -1462,7 +1502,6 @@
                     adminList.appendChild(row);
                 });
 
-                // Image upload
                 document.querySelectorAll('#adminDriverList .admin-upload-input').forEach(input => {
                     input.onchange = function(e) {
                         const file = this.files[0];
@@ -1483,7 +1522,6 @@
                     };
                 });
 
-                // Actions
                 document.querySelectorAll('#adminDriverList .actions i').forEach(el => {
                     el.onclick = function(e) {
                         e.stopPropagation();
@@ -1529,7 +1567,6 @@
                     };
                 });
 
-                // Admin orders
                 const adminOrders = document.getElementById('adminOrdersList');
                 adminOrders.innerHTML = '';
                 if (orders.length === 0) {
@@ -1565,7 +1602,10 @@
                                     const order = orders.find(o => o.id == id);
                                     if (order) {
                                         const driver = drivers.find(d => d.id === order.driverId);
-                                        if (driver) driver.orders = Math.max(0, driver.orders - 1);
+                                        if (driver) {
+                                            driver.orders = Math.max(0, driver.orders - 1);
+                                            updateDriverStatus(driver.id);
+                                        }
                                     }
                                     orders = orders.filter(o => o.id != id);
                                     saveState();
@@ -1578,7 +1618,10 @@
                                     order.status = 'تم التوصيل';
                                     order.returnTime = new Date().toLocaleTimeString('ar-EG');
                                     const driver = drivers.find(d => d.id === order.driverId);
-                                    if (driver) driver.orders = Math.max(0, driver.orders - 1);
+                                    if (driver) {
+                                        driver.orders = Math.max(0, driver.orders - 1);
+                                        updateDriverStatus(driver.id);
+                                    }
                                     saveState();
                                     renderAll();
                                     showToast(t('orderReturned'));
@@ -1588,7 +1631,6 @@
                     });
                 }
 
-                // Archive
                 const archiveContainer = document.getElementById('archiveList');
                 archiveContainer.innerHTML = '';
                 if (archive.length === 0) {
@@ -1619,7 +1661,10 @@
                 order.status = 'تم التوصيل';
                 order.returnTime = new Date().toLocaleTimeString('ar-EG');
                 const driver = drivers.find(d => d.id === order.driverId);
-                if (driver) driver.orders = Math.max(0, driver.orders - 1);
+                if (driver) {
+                    driver.orders = Math.max(0, driver.orders - 1);
+                    updateDriverStatus(driver.id);
+                }
                 saveState();
                 renderAll();
                 showToast(t('orderReturned') + ` #${order.orderNumber}`);
@@ -1637,7 +1682,6 @@
                 }
                 document.getElementById('orderError').style.display = 'none';
 
-                // if no driver selected, try to use selectedDriverId
                 if (!driverId && selectedDriverId) {
                     driverId = selectedDriverId;
                 }
@@ -1663,6 +1707,7 @@
                 };
                 orders.push(newOrder);
                 driver.orders += 1;
+                updateDriverStatus(driver.id); // will set to 'خارج للتوصيل'
 
                 // rotate driver to end (only among visible drivers)
                 const visible = drivers.filter(d => !d.hidden);
@@ -1700,7 +1745,8 @@
                     });
                 });
                 orders = [];
-                drivers.forEach(d => { d.orders = 0; });
+                drivers.forEach(d => { d.orders = 0;
+                    d.status = 'متاح'; });
                 saveState();
                 renderAll();
                 showToast(t('dayEnded'));
@@ -1851,7 +1897,8 @@
             document.addEventListener('DOMContentLoaded', function() {
                 loadState();
                 drivers.forEach(d => { if (d.orders === undefined) d.orders = 0; if (d.image === undefined) d.image =
-                    ''; if (d.hidden === undefined) d.hidden = false; });
+                    ''; if (d.hidden === undefined) d.hidden = false; if (d.status === undefined) d.status =
+                    'متاح'; });
 
                 const browserLang = navigator.language || 'ar';
                 currentLang = browserLang.startsWith('en') ? 'en' : 'ar';
@@ -1872,7 +1919,6 @@
                     if (e.target === this) toggleAdmin(false);
                 });
 
-                // Admin actions
                 document.getElementById('adminResetBtn').addEventListener('click', resetQueue);
                 document.getElementById('adminEndDayBtn').addEventListener('click', endDay);
                 document.getElementById('adminPrintBtn').addEventListener('click', printPdf);
@@ -1891,7 +1937,7 @@
                     if (!name) { showToast(t('enterOrder')); return; }
                     if (drivers.some(d => d.name === name)) { showToast(t('driverExists')); return; }
                     const newId = Date.now() + Math.random();
-                    drivers.push({ id: newId, name: name, orders: 0, image: '', hidden: false });
+                    drivers.push({ id: newId, name: name, orders: 0, image: '', hidden: false, status: 'متاح' });
                     nameInput.value = '';
                     saveState();
                     renderAll();
@@ -1911,7 +1957,6 @@
                     if (e.key === 'Escape') toggleAdmin(false);
                 });
 
-                // Real-time sync
                 window.addEventListener('storage', function(e) {
                     if (e.key === 'deliveryData') {
                         loadState();
@@ -1930,7 +1975,6 @@
                     }
                 }, 3000);
 
-                // Initial labels
                 setTimeout(() => {
                     document.getElementById('brandTitle').textContent = t('brandTitle');
                     document.getElementById('brandSub').textContent = t('brandSub');
