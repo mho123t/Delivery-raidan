@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* (same as previous, keep all styles) */
+        /* (all previous styles unchanged) */
         * {
             margin: 0;
             padding: 0;
@@ -155,7 +155,7 @@
         }
         .main-grid {
             display: grid;
-            grid-template-columns: 340px 1fr;
+            grid-template-columns: 320px 1fr;
             gap: 28px;
         }
         @media (max-width: 920px) {
@@ -295,9 +295,9 @@
         }
         .drivers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
-            max-height: 500px;
+            max-height: 480px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -972,6 +972,21 @@
         .driver-card.selected {
             animation: pulse-gold 1.8s infinite;
         }
+        /* additional: selected driver label */
+        .selected-driver-label {
+            text-align: center;
+            margin-top: 10px;
+            font-size: .85rem;
+            color: var(--gold);
+            border-top: 1px solid rgba(212, 175, 55, 0.05);
+            padding-top: 12px;
+        }
+        .selected-driver-label .name {
+            font-weight: 700;
+        }
+        .selected-driver-label .none {
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
@@ -1000,7 +1015,7 @@
 
         <!-- MAIN GRID -->
         <div class="main-grid">
-            <!-- LEFT: Order Form -->
+            <!-- LEFT: Order Form (dropdown removed) -->
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-plus-circle"></i>
@@ -1015,10 +1030,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label id="driverSelectLabel">الدليفري المختار <span class="en">Selected Driver</span></label>
-                    <select id="driverSelect"></select>
-                </div>
-                <div class="form-group">
                     <label id="orderNumberLabel">رقم الطلب <span class="en">Order #</span></label>
                     <input type="text" id="orderNumber" placeholder="مثال: 1087" />
                     <div id="orderError" style="color:#e74c3c;font-size:.7rem;margin-top:4px;display:none;">⚠ هذا الرقم مستخدم بالفعل</div>
@@ -1027,6 +1038,12 @@
                     <i class="fas fa-play"></i>
                     <span id="startBtnLabel">توصيل</span>
                 </button>
+
+                <!-- selected driver display -->
+                <div class="selected-driver-label" id="selectedDriverDisplay">
+                    <span id="selectedLabel">الدليفري المختار:</span>
+                    <span class="name" id="selectedDriverName">—</span>
+                </div>
 
                 <!-- Active orders mini -->
                 <div class="active-orders-mini" id="activeOrdersMini"></div>
@@ -1037,7 +1054,7 @@
                 <div class="card-title">
                     <i class="fas fa-users"></i>
                     <span id="driversTitle">الدليفري</span>
-                    <span class="en-label">Drivers · اضغط للاختيار</span>
+                    <span class="en-label">اضغط للاختيار</span>
                 </div>
                 <div class="drivers-grid" id="driversGrid"></div>
 
@@ -1150,7 +1167,6 @@
                         orderTitle: 'طلب جديد',
                         orderTitleEn: 'New Order',
                         deliveryTypeLabel: 'نوع الدليفري',
-                        driverSelectLabel: 'الدليفري المختار',
                         orderNumberLabel: 'رقم الطلب',
                         startBtnLabel: 'توصيل',
                         driversTitle: 'الدليفري',
@@ -1175,7 +1191,7 @@
                         imageUpdated: 'تم تحديث الصورة',
                         archiveCleared: 'تم مسح الأرشيف',
                         enterOrder: 'أدخل رقم الطلب',
-                        selectDriver: 'اختر دليفري',
+                        selectDriver: 'اختر دليفري من الشبكة',
                         driverExists: 'الاسم موجود بالفعل',
                         confirmDelete: 'حذف هذا الدليفري؟',
                         confirmClear: 'مسح الأرشيف بالكامل؟',
@@ -1196,6 +1212,8 @@
                         show: 'إظهار',
                         available: 'متاح',
                         out: 'خارج للتوصيل',
+                        selectedLabel: 'الدليفري المختار:',
+                        none: 'لا يوجد',
                     },
                     en: {
                         brandTitle: 'Redan Mandi',
@@ -1203,7 +1221,6 @@
                         orderTitle: 'New Order',
                         orderTitleEn: 'New Order',
                         deliveryTypeLabel: 'Delivery Type',
-                        driverSelectLabel: 'Selected Driver',
                         orderNumberLabel: 'Order #',
                         startBtnLabel: 'Deliver',
                         driversTitle: 'Drivers',
@@ -1228,7 +1245,7 @@
                         imageUpdated: 'Image updated',
                         archiveCleared: 'Archive cleared',
                         enterOrder: 'Enter order number',
-                        selectDriver: 'Select a driver',
+                        selectDriver: 'Select a driver from grid',
                         driverExists: 'Driver name exists',
                         confirmDelete: 'Delete this driver?',
                         confirmClear: 'Clear all archive?',
@@ -1249,6 +1266,8 @@
                         show: 'Show',
                         available: 'Available',
                         out: 'Out for Delivery',
+                        selectedLabel: 'Selected Driver:',
+                        none: 'None',
                     }
                 };
                 return map[currentLang]?.[key] || key;
@@ -1299,7 +1318,6 @@
                 if (!driver) return;
                 const active = getActiveOrdersForDriver(driverId);
                 driver.status = active.length > 0 ? 'خارج للتوصيل' : 'متاح';
-                // also update orders count to reflect active orders count
                 driver.orders = active.length;
             }
 
@@ -1310,11 +1328,10 @@
             // ===== RENDER =====
             function renderAll() {
                 renderDriversGrid();
-                renderSelect();
                 renderActiveMini();
                 renderAdmin();
                 updateQueue();
-                updateSelectedDriver();
+                updateSelectedDriverDisplay();
             }
 
             function renderDriversGrid() {
@@ -1368,7 +1385,6 @@
                             driver.hidden = !driver.hidden;
                             if (selectedDriverId === id) {
                                 selectedDriverId = null;
-                                document.getElementById('driverSelect').value = '';
                             }
                             saveState();
                             renderAll();
@@ -1382,12 +1398,10 @@
                 const driver = drivers.find(d => d.id === id);
                 if (!driver || driver.hidden) {
                     selectedDriverId = null;
-                    document.getElementById('driverSelect').value = '';
                     renderAll();
                     return;
                 }
                 selectedDriverId = id;
-                document.getElementById('driverSelect').value = id;
                 renderAll();
                 const card = document.querySelector(`.driver-card[data-id="${id}"]`);
                 if (card) {
@@ -1395,31 +1409,16 @@
                 }
             }
 
-            function renderSelect() {
-                const sel = document.getElementById('driverSelect');
-                const currentVal = sel.value;
-                sel.innerHTML = '';
-                drivers.filter(d => !d.hidden).forEach(d => {
-                    const opt = document.createElement('option');
-                    opt.value = d.id;
-                    const statusText = d.status === 'متاح' ? '🟢' : '🔴';
-                    opt.textContent = `${d.name} (${d.orders}) ${statusText}`;
-                    sel.appendChild(opt);
-                });
-                if (selectedDriverId && drivers.some(d => d.id === selectedDriverId && !d.hidden)) {
-                    sel.value = selectedDriverId;
-                } else if (currentVal && drivers.some(d => d.id == currentVal && !d.hidden)) {
-                    sel.value = currentVal;
-                    selectedDriverId = parseInt(currentVal);
-                } else if (sel.options.length > 0) {
-                    sel.value = sel.options[0].value;
-                    selectedDriverId = parseInt(sel.value);
+            function updateSelectedDriverDisplay() {
+                const nameSpan = document.getElementById('selectedDriverName');
+                const label = document.getElementById('selectedLabel');
+                label.textContent = t('selectedLabel');
+                if (selectedDriverId) {
+                    const driver = drivers.find(d => d.id === selectedDriverId);
+                    nameSpan.textContent = driver ? driver.name : t('none');
                 } else {
-                    selectedDriverId = null;
+                    nameSpan.textContent = t('none');
                 }
-                document.querySelectorAll('.driver-card').forEach(c => {
-                    c.classList.toggle('selected', parseInt(c.dataset.id) === selectedDriverId);
-                });
             }
 
             function renderActiveMini() {
@@ -1455,19 +1454,6 @@
                 } else {
                     qList.textContent = '—';
                 }
-            }
-
-            function updateSelectedDriver() {
-                const sel = document.getElementById('driverSelect');
-                if (selectedDriverId && drivers.some(d => d.id === selectedDriverId && !d.hidden)) {
-                    sel.value = selectedDriverId;
-                } else {
-                    selectedDriverId = null;
-                    sel.value = '';
-                }
-                document.querySelectorAll('.driver-card').forEach(c => {
-                    c.classList.toggle('selected', parseInt(c.dataset.id) === selectedDriverId);
-                });
             }
 
             // ===== ADMIN RENDER =====
@@ -1672,7 +1658,8 @@
 
             function startDelivery() {
                 const type = document.getElementById('deliveryType').value;
-                let driverId = parseInt(document.getElementById('driverSelect').value);
+                // use selectedDriverId from grid, no dropdown
+                const driverId = selectedDriverId;
                 const orderNumber = document.getElementById('orderNumber').value.trim();
                 if (!orderNumber) { showToast(t('enterOrder')); return; }
                 if (isOrderNumberUsed(orderNumber)) {
@@ -1682,9 +1669,6 @@
                 }
                 document.getElementById('orderError').style.display = 'none';
 
-                if (!driverId && selectedDriverId) {
-                    driverId = selectedDriverId;
-                }
                 if (!driverId) {
                     showToast(t('selectDriver'));
                     return;
@@ -1707,7 +1691,7 @@
                 };
                 orders.push(newOrder);
                 driver.orders += 1;
-                updateDriverStatus(driver.id); // will set to 'خارج للتوصيل'
+                updateDriverStatus(driver.id);
 
                 // rotate driver to end (only among visible drivers)
                 const visible = drivers.filter(d => !d.hidden);
@@ -1862,8 +1846,6 @@
                 document.getElementById('orderTitleEn').textContent = t('orderTitleEn');
                 document.getElementById('deliveryTypeLabel').innerHTML = t('deliveryTypeLabel') +
                     ' <span class="en">Delivery Type</span>';
-                document.getElementById('driverSelectLabel').innerHTML = t('driverSelectLabel') +
-                    ' <span class="en">Selected Driver</span>';
                 document.getElementById('orderNumberLabel').innerHTML = t('orderNumberLabel') +
                     ' <span class="en">Order #</span>';
                 document.getElementById('startBtnLabel').textContent = t('startBtnLabel');
@@ -1890,6 +1872,8 @@
                 document.getElementById('orderNumber').placeholder = currentLang === 'ar' ? 'مثال: 1087' : 'e.g. 1087';
                 document.getElementById('newDriverName').placeholder = currentLang === 'ar' ? 'اسم الدليفري' :
                     'Driver Name';
+                // update selected label
+                document.getElementById('selectedLabel').textContent = t('selectedLabel');
                 renderAll();
             }
 
@@ -1982,8 +1966,6 @@
                     document.getElementById('orderTitleEn').textContent = t('orderTitleEn');
                     document.getElementById('deliveryTypeLabel').innerHTML = t('deliveryTypeLabel') +
                         ' <span class="en">Delivery Type</span>';
-                    document.getElementById('driverSelectLabel').innerHTML = t('driverSelectLabel') +
-                        ' <span class="en">Selected Driver</span>';
                     document.getElementById('orderNumberLabel').innerHTML = t('orderNumberLabel') +
                         ' <span class="en">Order #</span>';
                     document.getElementById('startBtnLabel').textContent = t('startBtnLabel');
@@ -2011,6 +1993,8 @@
                         'e.g. 1087';
                     document.getElementById('newDriverName').placeholder = currentLang === 'ar' ? 'اسم الدليفري' :
                         'Driver Name';
+                    document.getElementById('selectedLabel').textContent = t('selectedLabel');
+                    updateSelectedDriverDisplay();
                 }, 50);
             });
 
